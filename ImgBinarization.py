@@ -6,15 +6,15 @@ img = cv2.imread(r".\resources\gradualGray.jpg", cv2.IMREAD_GRAYSCALE)
 
 # 应用5种不同的阈值方法
 # 直接简单二值阈值分割（大于阈值时取第三个参数的值，小于阈值取0），提取高亮部分（但细节丢失）
-ret, thBi = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+ret1, thBi = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
 # 简单二值阈值分割后取反，即大于阈值时取0，小于阈值时取第三个参数的值，提取黑暗部分（同样细节丢失）
-ret, thBiInv = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY_INV)
+ret2, thBiInv = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY_INV)
 # 直接抹平所有超过阈值的部分，仅抹平到阈值，即高亮部分丢失所有细节
-ret, thTrunk = cv2.threshold(img, 127, 255, cv2.THRESH_TRUNC)
+ret3, thTrunk = cv2.threshold(img, 127, 255, cv2.THRESH_TRUNC)
 # 未超过阈值的直接取0，超过阈值的保留原值，即仅保留高亮部分所有细节
-ret, th20 = cv2.threshold(img, 127, 255, cv2.THRESH_TOZERO)
+ret4, th20 = cv2.threshold(img, 127, 255, cv2.THRESH_TOZERO)
 # 超过阈值的直接取0，未超过阈值的保留原值，即仅保留低于阈值部分所有细节，直接抹黑高亮，类似Trunk，但处理高亮部分比trunk更厉害
-ret, th20Inv = cv2.threshold(img, 127, 255, cv2.THRESH_TOZERO_INV)
+ret5, th20Inv = cv2.threshold(img, 127, 255, cv2.THRESH_TOZERO_INV)
 
 titles = ['Original', 'BINARY', 'BINARY_INV', 'TRUNC', 'TOZERO', 'TOZERO_INV']
 images = [img, thBi, thBiInv, thTrunk, th20, th20Inv]
