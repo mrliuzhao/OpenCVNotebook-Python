@@ -26,8 +26,9 @@ cv2.imshow("Horizontally Inverse", picInv_H)
 # 垂直翻转
 picInv_V = picMat[::-1, :, :]
 cv2.imshow("Vertically Inverse", picInv_V)
-# 旋转180度，并简单降采样
+# 旋转180度，并简单降采样（二分降频采样）
 picInv = picMat[::-2, ::-2, :]
+cv2.namedWindow("Totally Inverse", cv2.WINDOW_NORMAL)
 cv2.imshow("Totally Inverse", picInv)
 
 # 通道分离
