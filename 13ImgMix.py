@@ -38,21 +38,6 @@ cv2.imshow('Picked Add', roiAdd)
 img1[366:494, 792:972] = roiAdd  # 融合后放回原图
 cv2.imshow('Picked Add in img1', img1)
 
-# # 保留除logo外的背景
-# img1_bg = cv2.bitwise_and(roi, roi, mask=mask_inv)
-# dst = cv2.add(img1_bg, img2)  # 进行融合
-#
-#
-#
-#
-#
-# # 创建掩膜
-# img2gray = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
-# ret, mask = cv2.threshold(img2gray, 250, 255, cv2.THRESH_BINARY)
-# maskInv = cv2.bitwise_not(mask)  # 需要将mask反向，此时有颜色的部分为白色，即全为1
-#
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-
-
