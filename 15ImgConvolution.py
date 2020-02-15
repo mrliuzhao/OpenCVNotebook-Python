@@ -9,10 +9,10 @@ cv2.imshow('origin', img)
 imgPad = cv2.copyMakeBorder(img, top=50, bottom=50, left=50, right=50, borderType=cv2.BORDER_CONSTANT, value=0)
 cv2.imshow('Padding zeros', imgPad)
 
-# 平均卷积核
+# 平均卷积核，一种低通滤波
 kernel = np.ones((7, 7), np.float32) / 49
 print(kernel)
-# 卷积操作，-1表示depth与原图相同
+# 滤波操作，-1表示depth与原图相同。注意该操作为滤波，生成的图片与原图片一样大小！
 unifFilter = cv2.filter2D(img, -1, kernel, borderType=cv2.BORDER_DEFAULT)
 
 # 锐化卷积核
@@ -21,6 +21,14 @@ kernel = np.array([[-1, -1, -1],
                    [-1, -1, -1]], np.float32)
 print(kernel)
 sharpen = cv2.filter2D(img, -1, kernel, borderType=cv2.BORDER_DEFAULT)
+
+# Sobel边缘提取滤波器，垂直方向（即查看水平方向上的梯度）
+kernel = np.array([[-1, 0, 1],
+                   [-2, 0, 2],
+                   [-1, 0, 1]], np.float32)
+print(kernel)
+sobel = cv2.filter2D(img, -1, kernel, borderType=cv2.BORDER_DEFAULT)
+cv2.imshow('sobel', sobel)
 
 # OpenCV自带的blur函数就是均值滤波
 blur = cv2.blur(img, (9, 9), borderType=cv2.BORDER_CONSTANT)
@@ -32,11 +40,11 @@ boxFilter = cv2.boxFilter(img, -1, (5, 5), normalize=True, borderType=cv2.BORDER
 gaussian = cv2.GaussianBlur(img, (7, 7), 3)
 print(cv2.getGaussianKernel(7, 3))
 
-# 中值滤波器，适用于去除斑点状的噪声，如椒盐噪声。非线性滤波
+# 中值滤波器，适用于去除斑点状的噪声，如椒盐噪声。非线性滤波，速度慢
 median = cv2.medianBlur(img, 3)
 cv2.imshow('median', median)
 
-# 双边滤波，该滤波器可以在消除噪声、模糊图片的同时，尽可能地保留边缘信息（即尽可能让物体边缘仍锐利）。非线性滤波
+# 双边滤波，该滤波器可以在消除噪声、模糊图片的同时，尽可能地保留边缘信息（即尽可能让物体边缘仍锐利）。非线性滤波，速度慢
 # d: 第二个参数表示滤波器大小，越大越慢，官方建议实时运算在5以内，线下应用设置d=9即可。为负数时则会自动根据sigmaSpace计算
 # sigmaColor：色彩方差
 # sigmaSpace：色彩在空间上的方差
