@@ -7,7 +7,8 @@ img = cv2.imread(r".\resources\sudoku.jpg", cv2.IMREAD_GRAYSCALE)
 # 1. 使用5*5的高斯卷积核降噪；
 # 2. 使用3*3的Sobel梯度滤波器计算0, 45, 90, 135度四个方向上的梯度
 # 3. 非极大值抑制（Non-Maximum Suppression，NMS）排除非边缘的像素，仅保留一些细线条作为候选边缘
-# 4. 滞后阈值，方法中两个threshold参数即分别为该步骤中的高低阈值，推荐的高低阈值比在2:1 ~ 3:1之间。像素值超过高阈值时被保留；小于低阈值时被排除；在高低阈值之间时，仅在该像素连接到一个高于高阈值的像素时保留。
+# 4. 滞后阈值，方法中两个threshold参数即分别为该步骤中的高低阈值，推荐的高低阈值比在2:1 ~ 3:1之间。
+# 像素值超过高阈值时被保留；小于低阈值时被排除；在高低阈值之间时，仅在该像素连接到一个高于高阈值的像素时保留。
 edges = cv2.Canny(img, threshold1=30, threshold2=70)
 edges2 = cv2.Canny(img, threshold1=30, threshold2=70, L2gradient=True)
 cv2.imshow('canny', np.hstack((img, edges, edges2)))
