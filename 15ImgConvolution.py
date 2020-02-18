@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 img = cv2.imread(r".\resources\cat2.jpg", cv2.IMREAD_COLOR)
 cv2.imshow('origin', img)
 
-# 固定值padding边框，上下左右均添加一个border，统一都填充0也称为zero padding
+# 固定值padding边框，上下左右均添加一个50px的border，统一都填充0也称为zero padding
 imgPad = cv2.copyMakeBorder(img, top=50, bottom=50, left=50, right=50, borderType=cv2.BORDER_CONSTANT, value=0)
 cv2.imshow('Padding zeros', imgPad)
 
