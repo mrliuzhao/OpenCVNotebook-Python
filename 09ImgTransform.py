@@ -5,7 +5,7 @@ img = cv2.imread(r".\resources\cat2.jpg", cv2.IMREAD_UNCHANGED)
 rows, cols, channels = img.shape
 cv2.imshow('origin', img)
 
-# 通过变换前后的三个点坐标获取对应的放射变换矩阵
+# 通过变换前后的三个点坐标获取对应的仿射变换矩阵
 # 变换前的三个点
 pts1 = np.float32([[0, 0], [1, 0], [0, 1]])
 # 变换后的三个点，逆时针旋转90°，均下移宽度位置

@@ -35,3 +35,13 @@ print(os)
 os[2, 2] = 1
 print(os)
 
+arr = np.array([[1, 2, 3],
+          [4, 5, 6],
+          [7, 8, 9]], np.int32)
+
+res = np.where(arr > 4)
+print(res)
+for pt in zip(*res[::-1]):
+    print(pt)
+
+

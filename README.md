@@ -6,3 +6,4 @@ My notebook for OpenCV-Python learning and practice
 主要参考资料：
 - https://github.com/ex2tron/OpenCV-Python-Tutorial
 - https://docs.opencv.org/4.0.0/d6/d00/tutorial_py_root.html
+- https://opencv-python-tutroals.readthedocs.io/en/latest/index.html
