@@ -66,8 +66,8 @@ equ = cv2.equalizeHist(img)
 histEqu = cv2.calcHist([equ], channels=[0], mask=None, histSize=[256], ranges=[0, 256])
 
 # 对比度受限的自适应直方图均衡化(Contrast Limited Adaptive Histogram Equalization，CLAHE)
-# 该方法在每个小区域内对图像进行直方图均衡化，并且为了防止噪点被放大，提供对比度限制参数，超过限制的不进行均衡化
-# clipLimit参数即为对比度限制阈值；tileGridSize即为进行HE的区块大小
+# 该方法在每个小区域内对图像进行直方图均衡化，均衡化方法是在直方图分布中，将超过阈值的部分裁剪下来，均匀填充在所有灰度空间。
+# clipLimit参数即为裁剪阈值；tileGridSize即为进行HE的区块大小
 clahe = cv2.createCLAHE(clipLimit=20.0, tileGridSize=(8, 8))
 cla = clahe.apply(img)
 histCla = cv2.calcHist([cla], channels=[0], mask=None, histSize=[256], ranges=[0, 256])
