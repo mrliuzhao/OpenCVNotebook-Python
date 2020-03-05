@@ -41,6 +41,7 @@ gaussian = cv2.GaussianBlur(img, (7, 7), 3)
 print(cv2.getGaussianKernel(7, 3))
 
 # 中值滤波器，适用于去除斑点状的噪声，如椒盐噪声。非线性滤波，速度慢
+# 在照片处理中明显有“磨皮”功能
 median = cv2.medianBlur(img, 3)
 cv2.imshow('median', median)
 

@@ -106,7 +106,9 @@ totImg = img.copy()
 for i in range(len(contours)):
     # 多边形逼近，得到多边形的角点。使用Douglas-Peucker算法
     imgCp = img.copy()
-    approx = cv2.approxPolyDP(contours[i], epsilon=3, closed=True)
+    # epsilon表示近似多边形周长和源轮廓周长之间的差值，越小则多边形与源轮廓越相似
+    e = 0.01 * cv2.arcLength(contours[i], True)  # 取源轮廓周长的百分比作为差值
+    approx = cv2.approxPolyDP(contours[i], epsilon=e, closed=True)
     cv2.polylines(imgCp, [approx], True, (0, 255, 0), 2)
     print('第{}条轮廓点数 : 多边形逼近的点数 = {} : {}'.format((i+1), len(contours[i]), len(approx)))
 
