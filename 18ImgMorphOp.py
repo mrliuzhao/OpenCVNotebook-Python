@@ -57,8 +57,7 @@ kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
 dilate = cv2.morphologyEx(img, cv2.MORPH_DILATE, kernel)
 erode = cv2.morphologyEx(img, cv2.MORPH_ERODE, kernel)
 gradient = cv2.morphologyEx(img, cv2.MORPH_GRADIENT, kernel)
-cv2.imshow('Gradient', np.vstack((np.hstack((img, gradient)), np.hstack((dilate, erode))))
-)
+cv2.imshow('Gradient', np.vstack((np.hstack((img, gradient)), np.hstack((dilate, erode)))))
 
 # TopHat运算，结果为原图 - 开运算图，相当于提取了物体外部的噪点
 img = cv2.imread(r'./resources/j_noise_out.bmp', cv2.IMREAD_GRAYSCALE)
