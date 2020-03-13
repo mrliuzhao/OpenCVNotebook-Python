@@ -8,11 +8,16 @@ rows, cols, channels = img.shape
 # 卡片的四个角点，非共线的四个点才能唯一确定透视变换
 pts1 = np.float32([[148, 80], [437, 114], [94, 247], [423, 288]])
 # 变换后分别在左上、右上、左下、右下四个点
-pts2 = np.float32([[0, 0], [320, 0], [0, 178], [320, 178]])
+tw, th = (320, 178)
+# tw, th = (352, 196)
+# 尺度相差过大时，匹配很差
+# tw, th = (1280, 712)
+# tw, th = (160, 89)
+pts2 = np.float32([[0, 0], [tw, 0], [0, th], [tw, th]])
 
 # 透视变换
 M = cv2.getPerspectiveTransform(pts1, pts2)
-imgPersp = cv2.warpPerspective(img, M, (320, 178))
+imgPersp = cv2.warpPerspective(img, M, (tw, th))
 
 gray1 = cv2.cvtColor(imgPersp, cv2.COLOR_BGR2GRAY)
 gray2 = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -51,7 +56,6 @@ print('mask type:', type(mask))
 print('mask shape:', mask.shape)
 
 matMask = mask.ravel().tolist()
-print('type of matMask:', type(matMask))
 
 # 将四个角点转换到原图，并画出
 h, w = imgPersp.shape[:2]

@@ -13,8 +13,9 @@ def draw_person(image, person):
     cv2.rectangle(image, (x, y), (x + w, y + h), color=(0, 255, 255), thickness=5)
 
 
-img = cv2.imread(r'D:\temp\people.jpg', cv2.IMREAD_COLOR)
+# img = cv2.imread(r'D:\temp\people.jpg', cv2.IMREAD_COLOR)
 # img = cv2.imread(r'.\resources\pic3.jpg', cv2.IMREAD_COLOR)
+img = cv2.imread(r'.\resources\people3.jpg', cv2.IMREAD_COLOR)
 hog = cv2.HOGDescriptor()
 
 hog.setSVMDetector(cv2.HOGDescriptor.getDefaultPeopleDetector())
@@ -34,6 +35,7 @@ print(len(found_filtered))
 for person in found_filtered:
     draw_person(img, person)
 
+cv2.namedWindow('People Detection', cv2.WINDOW_NORMAL)
 cv2.imshow('People Detection', img)
 
 

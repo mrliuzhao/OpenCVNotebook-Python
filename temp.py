@@ -1,72 +1,78 @@
 import cv2
 import numpy as np
+import matplotlib.pyplot as plt
+import scipy.io as scio
 
-# img = cv2.imread(r".\resources\noisy.jpg", cv2.IMREAD_GRAYSCALE)
-# cv2.imshow('origin', img)
-# print('Origin shape:', img.shape)
+# svmDet = cv2.HOGDescriptor.getDefaultPeopleDetector()
+# print('type of SVM:', type(svmDet))  # numpy.ndarray
+# print('shape of SVM:', svmDet.shape)  # (3781, 1)
+# print('dtype of SVM:', svmDet.dtype)  # float32
+# print('SVM[0,0]:', svmDet[0, 0])
+# print('max SVM:', svmDet.max())
+# print('min SVM:', svmDet.min())
+# plt.hist(svmDet.ravel())
+# plt.show()
+
+data = scio.loadmat(r'.\resources\mpii_human_pose_v1_u12_1.mat')
+print(type(data))  # <class 'dict'>
+print(type(data['RELEASE']))  # <class 'numpy.ndarray'>
+print(data['RELEASE'].shape)  # (1, 1)
+print(data['RELEASE'].dtype)  # [('annolist', 'O'), ('img_train', 'O'), ('version', 'O'), ('single_person', 'O'), ('act', 'O'), ('video_list', 'O')]
+
+dataRel = data['RELEASE']
+annolist = dataRel['annolist'][0, 0]
+video_list = dataRel['video_list'][0, 0]
+img_train = dataRel['img_train'][0, 0]
+version = dataRel['version'][0, 0]
+single_person = dataRel['single_person'][0, 0]
+act = dataRel['act'][0, 0]
+
+print('type of single_person:', type(single_person))
+print('shape of single_person:', single_person.shape)  # (24987, 1)
+print('dtype of single_person:', single_person.dtype)  # [('name', 'O')]
+
+
+first = single_person[0, 0]
+print('type of first single_person:', type(first))
+print('shape of first single_person:', first.shape)  # (1, 1)
+print('dtype of first single_person:', first.dtype)  # uint8
+print('first single_person:', first[0, 0])  # uint8
+
+
+print('type of annolist:', type(annolist))
+print('shape of annolist:', annolist.shape)  # (1, 24987)
+print('dtype of annolist:', annolist.dtype)  # [('image', 'O'), ('annorect', 'O'), ('frame_sec', 'O'), ('vididx', 'O')]
+
+first = annolist[0, 0]
+print('type of first image:', type(first['image']))
+print('shape of first image:', first['image'].shape)  # (1, 1)
+print('dtype of first image:', first['image'].dtype)  # [('name', 'O')]
+
+firstImg = first['image']
+print('type of first image name:', type(firstImg['name']))
+print('shape of first image name:', firstImg['name'].shape)  # (1, 1)
+print('dtype of first image name:', firstImg['name'].dtype)  # object
+print('first image name:', firstImg['name'][0, 0][0])  # 037454012.jpg
+
+firstAnno = first['annorect']
+print('dtype of first annorect:', firstAnno.dtype)  # [('scale', 'O'), ('objpos', 'O')]
+print('type of first annorect objpos:', type(firstAnno['objpos']))
+print('shape of first annorect objpos:', firstAnno['objpos'].shape)  # (1, 1)
+print('dtype of first annorect objpos:', firstAnno['objpos'].dtype)  # object
+print('first annorect objpos x,y: ({},{})'.format(firstAnno['objpos']['x'][0, 0][0], firstAnno['objpos']['y'][0, 0][0]))
 #
-# # 固定值padding边框，上下左右均添加一个border，统一都填充0也称为zero padding
-# imgPad = cv2.copyMakeBorder(img, top=50, bottom=50, left=50, right=50, borderType=cv2.BORDER_CONSTANT, value=0)
-# cv2.imshow('Padding zeros', imgPad)
-# print('Padded shape:', imgPad.shape)
 #
-# # 平均卷积核
-# kernel = np.ones((17, 17), np.float32) / 49
-# print(kernel)
-# unifFilter = cv2.filter2D(img, -1, kernel)
-# cv2.imshow('unif', unifFilter)
-# print('unif shape:', unifFilter.shape)
+# # x1, .y1, .x2, .y2
+# secImg = content[0, 1]['image']
 #
-# # OpenCV自带的blur函数就是均值滤波
-# blur = cv2.blur(img, (9, 9))
-# cv2.imshow('blur', blur)
-# print('blur shape:', blur.shape)
 #
-# # 高斯滤波器
-# gaussian = cv2.GaussianBlur(img, (9, 9), 3)
-# cv2.imshow('gaussian blur', gaussian)
-# print('gaussian blur shape:', gaussian.shape)
-
-# cv2.waitKey(0)
-# cv2.destroyAllWindows()
-
-os = np.zeros((5, 5), np.uint8)
-print(os)
-os[2, 2] = 1
-print(os)
-
-arr = np.array([[1, 2, 3],
-          [4, 5, 6],
-          [7, 8, 9]], np.int32)
-
-res = np.where(arr > 4)
-print(res)
-for pt in zip(*res[::-1]):
-    print(pt)
+# print(type(version))
+# print(version.shape)
+# print(version.dtype)
+# print(version[0, 0])
 
 
-# 1. 霍夫直线变换
-img = cv2.imread(r".\resources\shapes.jpg")
-drawing = np.zeros(img.shape[:], dtype=np.uint8)  # 创建画板
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-edges = cv2.Canny(gray, 50, 150)
 
-# 霍夫直线变换
-lines = cv2.HoughLines(edges, 0.8, np.pi / 180, 90)
 
-# 将检测的线画出来（注意是极坐标噢）
-for line in lines:
-    rho, theta = line[0]
-    a = np.cos(theta)
-    b = np.sin(theta)
-    x0 = a * rho
-    y0 = b * rho
-    x1 = int(x0 + 1000 * (-b))
-    y1 = int(y0 + 1000 * (a))
-    x2 = int(x0 - 1000 * (-b))
-    y2 = int(y0 - 1000 * (a))
 
-    cv2.line(drawing, (x1, y1), (x2, y2), (0, 0, 255))
 
-cv2.imshow('hough lines', np.hstack((img, drawing)))
-cv2.waitKey(0)

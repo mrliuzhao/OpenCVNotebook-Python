@@ -1,7 +1,6 @@
 import cv2
 import os
 import numpy as np
-import math
 
 
 def load_img(path):
@@ -26,7 +25,6 @@ def load_img(path):
     return faceImgs, labels, labelNameDict
 
 
-
 if __name__ == "__main__":
 
     faceImgs, labels, labelNameDict = load_img(r'.\resources\faces')
@@ -34,17 +32,13 @@ if __name__ == "__main__":
     faceImgs = np.asarray(faceImgs)
     labels = np.asarray(labels)
 
-    # 仅取一半训练，另一半检测阈值
-    face_train = faceImgs[:len(faceImgs)//2]
-    label_train = labels[:len(labels)//2]
-
     # eigenFaceModel
     # model = cv2.face.EigenFaceRecognizer_create()
     # FisherFaceModel
     # model = cv2.face.FisherFaceRecognizer_create()
     # LBPHFaceRecognizer
     model = cv2.face.LBPHFaceRecognizer_create()
-    model.train(face_train, label_train)
+    model.train(faceImgs, labels)
 
     # 使用另一半数据检测，并给出阈值范围
     face_test = faceImgs[len(faceImgs)//2:]
