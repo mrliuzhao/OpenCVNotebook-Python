@@ -20,8 +20,10 @@ hog = cv2.HOGDescriptor()
 
 hog.setSVMDetector(cv2.HOGDescriptor.getDefaultPeopleDetector())
 
-found, w = hog.detectMultiScale(img)
+found, ws = hog.detectMultiScale(img)
 print(len(found))
+print(ws.shape)
+print(ws.max())
 found_filtered = []
 for ri, r in enumerate(found):
     for qi, q in enumerate(found):
