@@ -3,25 +3,30 @@ import numpy as np
 from os.path import join
 
 
-datapath = r".\resources\CarData\TrainImages"
+scores = np.array([2, 3, 1, 4, 9, 6, 7, 8, 5, 10], np.int32)
+score_idx = np.argsort(scores)[::-1]
+print('scores:', scores)
+print('score_idx:', score_idx)
 
-
-def path(cls, i):
-    return "%s\\%s-%d.pgm" % (datapath, cls, i)
-
-
-pos, neg = "pos", "neg"
-# SIFT特征
-sift = cv2.xfeatures2d.SIFT_create()
-
-
-print("path:", path(pos, 0))
-img = cv2.imread(path(pos, 0), cv2.IMREAD_GRAYSCALE)
-print(img.shape)
-img = cv2.imread(path(pos, 1), cv2.IMREAD_GRAYSCALE)
-print(img.shape)
-kpts, des = sift.detectAndCompute(img, mask=None)
-print("length of des:", len(des))
+while len(score_idx) > 0:
+    box_idx = score_idx[0]
+    print('box_idx:', box_idx)
+    to_delete = [0]
+    for i, s in enumerate(score_idx):
+        print('s:', s)
+        if s == box_idx:
+            continue
+        try:
+            if i % 2 == 3:
+                to_delete.append(i)
+                print('to_delete:', to_delete)
+            # score_idx = np.delete(score_idx, i, 0)
+            # print('score_idx:', score_idx)
+        except:
+            pass
+    print('to_delete:', to_delete)
+    score_idx = np.delete(score_idx, to_delete, 0)
+    print('score_idx:', score_idx)
 
 
 

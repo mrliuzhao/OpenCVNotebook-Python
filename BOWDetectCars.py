@@ -101,11 +101,14 @@ print("shape of train label:", trainlabels.shape)
 svm = cv2.ml.SVM_create()
 svm.train(traindata, cv2.ml.ROW_SAMPLE, trainlabels)
 
+
 # 使用训练后的SVM分类器预测新图片
 def predict(fn):
     f = bow_feature(fn)
-    p = svm.predict(f)
-    print(fn, "\t", p[1][0][0])
+    # ret, p = svm.predict(f, flags=cv2.ml.STAT_MODEL_RAW_OUTPUT)
+    ret, p = svm.predict(f, flags=cv2.ml.STAT_MODEL_UPDATE_MODEL)
+    print("shape of predict:", p.shape)  # 均为 1 * 1矩阵；默认返回label ；raw时返回置信程度，越低置信度越高
+    print(fn, "\t", p[0][0])
     return p
 
 
@@ -123,28 +126,28 @@ cup_predict = predict(cup)
 
 font = cv2.FONT_HERSHEY_COMPLEX
 
-if car1_predict[1][0][0] == 1.0:
+if car1_predict[0][0] == 1.0:
     cv2.putText(car1_Img, 'Car Detected', (10, 30), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
 else:
     cv2.putText(car1_Img, 'No Car Detected', (10, 30), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
 cv2.namedWindow('Car1 Detection', cv2.WINDOW_NORMAL)
 cv2.imshow('Car1 Detection', car1_Img)
 
-if car2_predict[1][0][0] == 1.0:
+if car2_predict[0][0] == 1.0:
     cv2.putText(car2_Img, 'Car Detected', (10, 30), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
 else:
     cv2.putText(car2_Img, 'No Car Detected', (10, 30), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
 cv2.namedWindow('Car2 Detection', cv2.WINDOW_NORMAL)
 cv2.imshow('Car2 Detection', car2_Img)
 
-if vr_predict[1][0][0] == 1.0:
+if vr_predict[0][0] == 1.0:
     cv2.putText(vr_Img, 'Car Detected', (10, 30), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
 else:
     cv2.putText(vr_Img, 'No Car Detected', (10, 30), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
 cv2.namedWindow('VR Detection', cv2.WINDOW_NORMAL)
 cv2.imshow('VR Detection', vr_Img)
 
-if cup_predict[1][0][0] == 1.0:
+if cup_predict[0][0] == 1.0:
     cv2.putText(cup_Img, 'Car Detected', (10, 30), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
 else:
     cv2.putText(cup_Img, 'No Car Detected', (10, 30), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
