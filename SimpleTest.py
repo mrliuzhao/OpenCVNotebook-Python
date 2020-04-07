@@ -1,33 +1,23 @@
 import cv2
 import numpy as np
 from os.path import join
+import CarDetection.pyramid as py
 
 
-scores = np.array([2, 3, 1, 4, 9, 6, 7, 8, 5, 10], np.int32)
-score_idx = np.argsort(scores)[::-1]
-print('scores:', scores)
-print('score_idx:', score_idx)
+img = cv2.imread(r".\resources\car1.jpg", cv2.IMREAD_COLOR)
+h, w = img.shape[:2]
+cv2.imshow('display', img)
 
-while len(score_idx) > 0:
-    box_idx = score_idx[0]
-    print('box_idx:', box_idx)
-    to_delete = [0]
-    for i, s in enumerate(score_idx):
-        print('s:', s)
-        if s == box_idx:
-            continue
-        try:
-            if i % 2 == 3:
-                to_delete.append(i)
-                print('to_delete:', to_delete)
-            # score_idx = np.delete(score_idx, i, 0)
-            # print('score_idx:', score_idx)
-        except:
-            pass
-    print('to_delete:', to_delete)
-    score_idx = np.delete(score_idx, to_delete, 0)
-    print('score_idx:', score_idx)
+count = 0
+for image in py.pyramid(img, 1.5, (w/5, h/5)):
+    fn = 'car-%d.jpg' % count
+    cv2.imwrite(fn, image)
+    count += 1
 
+
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
 
 
 
