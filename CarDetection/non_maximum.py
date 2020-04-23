@@ -44,24 +44,42 @@ def non_max_suppression_fast(boxes, overlapThresh = 0.5):
     scores = boxes[:, 4]  # 分数数组
     score_idx = np.argsort(scores)[::-1]  # 排序后分数数组下标，从大到小
 
-    box_to_delete = []
+    boxes_res = []
+    # box_to_delete = []
     while len(score_idx) > 0:
-        box_idx = score_idx[0]
+        # box_idx = score_idx[0]
         score_to_delete = [0]
+        score_temp = []
         for i, s in enumerate(score_idx):
-            if s == box_idx:
+            if i == 0:
+                score_temp.append(scores[s])
+                boxtemp = boxes[s][:4]
+                # box_to_delete.append(s)
                 continue
             try:
-                if overlaps(boxes[s], boxes[box_idx], overlapThresh):
-                    box_to_delete.append(s)
+                # 若重叠超过一定限度，对重叠矩形进行操作
+                if overlaps(boxtemp, boxes[s], overlapThresh):
+                    # box_to_delete.append(s)
+                    score_temp.append(scores[s])
+                    # 取并集的最小外接矩形
+                    # x_min = min(boxtemp[0], boxes[s][0])
+                    # x_max = max(boxtemp[2], boxes[s][2])
+                    # y_min = min(boxtemp[1], boxes[s][1])
+                    # y_max = max(boxtemp[3], boxes[s][3])
+                    # boxtemp = (x_min, y_min, x_max, y_max)
+                    # 保留面积较大的那个
+                    if area(boxes[s]) > area(boxtemp):
+                        boxtemp = boxes[s][:4]
                     score_to_delete.append(i)
                     # score_idx = np.delete(score_idx, [s], 0)
             except:
                 pass
         score_idx = np.delete(score_idx, score_to_delete, 0)
+        x1, y1, x2, y2 = boxtemp
+        boxes_res.append((x1, y1, x2, y2, np.mean(score_temp)))
+    # boxes = np.delete(boxes, box_to_delete, 0)
 
-    boxes = np.delete(boxes, box_to_delete, 0)
-    return boxes
+    return boxes_res
 
 
 """

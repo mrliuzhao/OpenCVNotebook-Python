@@ -1,23 +1,21 @@
 import cv2
 import numpy as np
-from os.path import join
-import CarDetection.pyramid as py
+import time
+import tensorflow as tf
+import DigitsOCR.MatUtils as matutils
+import DigitsOCR.ocrutils as utils
 
+# conv_kernel = np.random.normal(0, 1, size=(6, 6))
+# maxpool, mask = matutils.maxpooling(conv_kernel, 3)
+# print(conv_kernel)
+# print(maxpool)
+# print(mask)
 
-img = cv2.imread(r".\resources\car1.jpg", cv2.IMREAD_COLOR)
-h, w = img.shape[:2]
-cv2.imshow('display', img)
+testimg, testlabel = utils.load_mnistdata('test')
+imgbatch, labelbatch = utils.next_batch(testimg, testlabel, batchsize=100)
 
-count = 0
-for image in py.pyramid(img, 1.5, (w/5, h/5)):
-    fn = 'car-%d.jpg' % count
-    cv2.imwrite(fn, image)
-    count += 1
-
-
-
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+print('test image shape:', imgbatch.shape)
+print('test label shape:', labelbatch.shape)
 
 
 

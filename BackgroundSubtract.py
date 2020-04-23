@@ -2,25 +2,27 @@ import cv2
 
 cap = cv2.VideoCapture(0)
 
-background = None
-morph_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
+mog = cv2.createBackgroundSubtractorMOG2(detectShadows=True)
+knn = cv2.createBackgroundSubtractorKNN(detectShadows=True)
+
+morph_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
 
 while True:
     _, frame = cap.read()
 
-    if background is None:
-        background = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        background = cv2.GaussianBlur(background, (21, 21), 1)
+    # fgmask = mog.apply(frame)
+    fgmask = knn.apply(frame)
+    fgmask = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, morph_kernel)
+    fgmask, contours, hierarchy = cv2.findContours(fgmask, mode=cv2.RETR_EXTERNAL, method=cv2.CHAIN_APPROX_SIMPLE)
+    for c in contours:
+        if cv2.contourArea(c) > 40 * 40:
+            (x, y, w, h) = cv2.boundingRect(c)
+            cv2.rectangle(frame, (x, y), (x+h, y+w), (0, 0, 255), 2)
 
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    gray = cv2.GaussianBlur(gray, (21, 21), 1)
+    extract = cv2.bitwise_and(frame, frame, mask=fgmask)
 
-    diff = cv2.absdiff(gray, background)
-    _, diff = cv2.threshold(diff, 15, 255, cv2.THRESH_BINARY)
-    diff = cv2.morphologyEx(diff, cv2.MORPH_CLOSE, morph_kernel)
-
-    diff = cv2.cvtColor(diff, cv2.COLOR_GRAY2BGR)
-    cv2.imshow('Display', cv2.hconcat((frame, diff)))
+    fgmask = cv2.cvtColor(fgmask, cv2.COLOR_GRAY2BGR)
+    cv2.imshow('Display', cv2.hconcat((frame, fgmask, extract)))
 
     keyCode = cv2.waitKey(1)
     if keyCode == 27:

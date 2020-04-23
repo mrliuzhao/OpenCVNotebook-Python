@@ -56,10 +56,7 @@ def copyRect(src, dst, srcRect=None, dstRect=None, mask=None, lockRatio=False):
     dst[dy:dy+dh, dx:dx+dw] = np.where(mask, src, dstCp)
 
 
-
-
-
-def createMedianMask(disparityMap, validDepthMask, rect = None):
+def createMedianMask(disparityMap, validDepthMask, rect=None):
     '''
     该函数用于生成Mask，忽略指定区域内距离过远或过近，或深度数据无效的像素
     :param disparityMap: 视差数据
